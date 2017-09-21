@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exam</title>
+<script src="al.js"></script>
+</head>
+<body>
+	<input type="button" value="Log Out" onClick="logout()" />
+	<div id="output">Loading...</div>
+
+	<script>
+		OnLoad( () => {
+			if(User)
+				getElement("output").innerHTML = "Welcome "+ User.name
+			else
+				getElement("output").innerHTML = "Who are you?"	
+		})
+	</script>
+
+</body>
+</html>

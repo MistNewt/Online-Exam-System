@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login page</title>
+<script src="al.js"></script>
+</head>
+<body>
+
+	<h1>Sign in</h1>
+	ID :
+	<input id="id" />
+	<br /> Password:
+	<input id="pass" />
+	<br />
+	<input type="button" value="Ok" onClick="validate()" />
+	<br />
+	<div id="output"></div>
+
+	<script>
+		function validate() {
+			retrieve( () => {
+				var id = getValue("id")
+				var pass = getValue("pass")
+				User = U.find( u=>u.id==id && u.password==pass )
+				setCookie()
+				if(User)
+					window.location = User.type == "student" ? "exam.html" : "questions.html"
+				else
+					getElement("output").innerHTML = "try again"
+			})
+		}
+	</script>
+</body>
+</html>
