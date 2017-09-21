@@ -23,34 +23,13 @@
 			<div class="row col-lg-12">
 				<span><h3>Questions</h3></span>
 			</div>
-			<div id="questions">
-				<div class="row col-lg-12">
-					<span>Sample Question</span>
-				</div>
-				<div class="row col-lg-12">
-					<span>Sample Question</span>
-				</div>
-				<div class="row col-lg-12">
-					<span>Sample Question</span>
-				</div>
-			</div>
+			<div id="questions"></div>
 		</div>
 		<div class="col-lg-6">
 			<div class="row col-lg-12">
 				<span><h3>Choices</h3></span>
 			</div>
-			<div class="row col-lg-12">
-				<span id="c1">Option 1</span>
-			</div>
-			<div class="row col-lg-12">
-				<span id="c2">Option 2</span>
-			</div>
-			<div class="row col-lg-12">
-				<span id="c3">Option 3</span>
-			</div>
-			<div class="row col-lg-12">
-				<span id="c4">Option 4</span>
-			</div>
+			<div id="choices"></div>
 		</div>
 	</div>
 	<div class="row">
@@ -67,6 +46,7 @@
 
 
 	<script>
+		var questionsCount = 0
 		OnLoad( () => {
 			if(User)
 				getElement("output").innerHTML = "Welcome "+ User.name
@@ -77,12 +57,30 @@
 		function addQuestion() {
 			var questionsDiv = $("#questions")
 			questionsDiv.append("<div class='row col-lg-12'><span>Sample Question</span></div>")
+			addChoices()
+			questionsCount ++
+		}
+		
+		function addChoices() {
+			var choicesDiv = $("#choices")
+			choicesDiv.children().remove()
+			for(var i = 1;i<=4;i++)
+				choicesDiv.append("<div class='row col-lg-12'><span id='c"+i+"'>Sample option</span></div>")
+		}
+		
+		function removeChoices() {
+			var choicesDiv = $("#choices")
+			choicesDiv.children().remove()
 		}
 		
 		function removeQuestion() {
 			var questionsDiv = $("#questions")
 			var length = questionsDiv.children().length
 			questionsDiv.children()[length-1].remove()
+			questionsCount --
+			removeChoices()
+			if(questionsCount > 0)
+				addChoices()
 		}
 	</script>
 
