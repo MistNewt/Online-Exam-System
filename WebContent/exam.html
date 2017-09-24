@@ -4,18 +4,166 @@
 <meta charset="UTF-8">
 <title>Exam</title>
 <script src="al.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<input type="button" value="Log Out" onClick="logout()" />
-	<div id="output">Loading...</div>
+	<div class="row">
+		<div class="col-lg-4" id="output">Loading...</div>
+		<div class="col-lg-2" id = "score"><strong>Score: 0</strong></div>
+		<div class="col-lg-6">
+			<input type="button" class="btn btn-danger" value="Log Out"
+				onClick="logout()" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="row col-lg-12">
+				<span><strong>Questions</strong></span>
+			</div>
+			<div id="questions" class="row col-lg-12"></div>
+		</div>
+		<div class="col-lg-6">
+			<div class="row col-lg-12">
+				<span><strong>Choices</strong></span>
+			</div>
+			<div id="choices">
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
+						id='c1'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c2_radio" value="2" /> <span
+						id='c2'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c3_radio" value="3" /> <span
+						id='c3'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c4_radio" value="4" /> <span
+						id='c4'>Sample option</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-1">
+			<input type="button" class="btn btn-primary" value="prev"
+				onClick="prevQuestion()" />
+		</div>
+		<div class="col-sm-1">
+			<input type="button" class="btn btn-primary" value="next"
+				onClick="nextQuestion()" />
+		</div>
+	</div>
 
 	<script>
+		var currentQuestion = 0
+		var currentAnswer = null
+		var selectedAnswer = 1
+		var score = 0
+		var answeredFlag = new Array(Q.length)
+		
+		$("#choices").on("change",choicesHandler)
+		
 		OnLoad( () => {
 			if(User)
 				getElement("output").innerHTML = "Welcome "+ User.name
 			else
-				getElement("output").innerHTML = "Who are you?"	
+				getElement("output").innerHTML = "Who are you?"
+			fetchQuestion()
 		})
+		
+		function choicesHandler() {
+			selectedAnswer = $("#choices input[type='radio']:checked").val()
+		}
+		
+		function fetchQuestion() {
+			// Fetching the question
+			var questionDiv = $("#questions")
+			// Clear previous question, if any
+			questionDiv.children().remove()
+			var questionElement = $("<div>")
+			var spanElement = $("<span>")
+			spanElement.text(Q[currentQuestion].statement)
+			questionElement.append(spanElement)
+			questionDiv.append(questionElement)
+			
+			// Fetching the choices
+			var choices = Q[currentQuestion].choices
+			for(var i = 1;i<=4;i++) {
+				$("#c"+i).text(choices[i-1])
+			}
+			
+			// Making default selection
+			$("#c1_radio").attr("checked","checked")
+			
+			// Fetching the answer
+			currentAnswer = Q[currentQuestion].answer
+		}
+		
+		function prevQuestion() {
+			if(currentQuestion == 0) {
+				alert("No previous questions")
+			} else if(!selectedAnswer) {
+				alert("Select an answer first")
+			} else {
+				if(selectedAnswer == currentAnswer) {
+					if(!answeredFlag[currentQuestion]) {
+						score ++
+						answeredFlag[currentQuestion] = true
+					}
+				} else
+					answeredFlag[currentQuestion] = false
+				updateScore()
+				currentQuestion --
+				fetchQuestion()
+			}
+		}
+		
+		function nextQuestion() {
+			var endFlag = false
+			if(currentQuestion == Q.length -1) {
+				if(confirm("No more questions! Do you want to end?")){
+					endFlag = true
+				}
+			} else if(!selectedAnswer) {
+				alert("Select an answer first")
+			} else {
+				if(selectedAnswer == currentAnswer) {
+					if(!answeredFlag[currentQuestion]) {
+						score ++
+						answeredFlag[currentQuestion] = true
+					}
+				}
+				else
+					answeredFlag[currentQuestion] = false
+				updateScore()
+				currentQuestion ++
+				fetchQuestion()
+			}
+			if(endFlag)
+				showScore()
+		}
+		
+		function updateScore() {
+			var scoreDiv = $("#score")
+			if(selectedAnswer) {
+				scoreDiv.html("<strong>Score: "+score+"</strong>")
+			} else {
+				scoreDiv.html("<strong>Score: 0</strong>")
+			}
+		}
+		
+		function showScore() {
+			console.log("You scored: "+score)
+		}
+		
 	</script>
 
 </body>

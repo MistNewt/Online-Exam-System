@@ -15,7 +15,7 @@
 		<div class="col-lg-6" id="output">Loading...</div>
 		<div class="col-lg-6">
 			<input type="button" class="btn btn-danger" value="Log Out"
-				onClick="logout()" />
+				onClick="takeMeOut()" />
 		</div>
 	</div>
 	<div class="row">
@@ -63,7 +63,10 @@
 
 
 	<script>
-		var questionCount = 0
+		
+		var questionCount = 0 
+		if(Q)
+			questionCount = Q.length
 		var selectedOption = 1
 		var selectedQuestion = null
 		OnLoad( () => {
@@ -74,6 +77,7 @@
 		});
 		
 		hideChoices()
+		retrieveQuestions()
 		
 		$("#questions").click(editQuestion)
 		$("#questions").focusout(questionEdited)
@@ -81,9 +85,47 @@
 		$("#choices").click(setOption)
 		$("#choices").focusout(saveOption)
 		
+		function resetChoices() {
+			for(var i = 1;i<=4;i++)
+				$("#c"+i).text("Sample option")
+		}
+		
+		// Updates the list with the stored questions
+		function retrieveQuestions() {
+			var questionsDiv = $("#questions")
+			for(var i = 0;i<questionCount;i++) {
+				var questionElement = $("<div>")
+				var spanElement = $("<span>")
+				spanElement.text(Q[i].statement)
+				questionElement.append(spanElement)
+				questionElement.attr("id",i+1)
+				questionsDiv.append(questionElement)
+			}
+			// retrieve the options
+			retrieveOptions()
+			// Prevent duplicacy of the latest question
+			Q.pop()
+			store(function () {
+				console.log("Popped to prevent duplicacy")
+			})
+		}
+		
+		// Populate the options with the top question's choices
+		function retrieveOptions() {
+			if(questionCount != 0) {
+				for(var i = 0;i<4;i++) {
+					$("#c"+(i+1)).text(Q[questionCount-1].choices[i])
+				}
+				var answer = Q[questionCount-1].answer
+				$("#c"+answer+"_radio").attr("checked","checked")
+			} else
+				hideChoices()
+		}
+		
 		function editQuestion(event) {
-			if(event.target.nodeName == "SPAN") {
-				var element = $(event.target)
+			var element = $(event.target)
+			var qID = element.parent().attr("id")
+			if(event.target.nodeName == "SPAN" && qID == questionCount) {
 				var questionText = element.text()
 				var parentElement = element.parent()
 				var inputElement = $("<input />")
@@ -94,8 +136,9 @@
 		}
 		
 		function questionEdited(event) {
-			if(event.target.nodeName == "INPUT") {
-				var element = $(event.target)
+			var element = $(event.target)
+			var qID = element.parent().attr("id")
+			if(event.target.nodeName == "INPUT" && qID == questionCount) {
 				var questionText = element.val()
 				selectedQuestion = questionText
 				var parentElement = element.parent()
@@ -148,21 +191,75 @@
 		}
 		
 		function addQuestion() {
+			// save last question
+			if(questionCount!=0) {
+				if(!saveQuestion()) {
+					alert("Select the correct option!!")
+					return
+				}
+				resetChoices()
+			}
+			questionCount ++
 			var questionsDiv = $("#questions")
 			var questionElement = $("<div>")
 			questionElement.append("<span>Sample Question</span>")
+			questionElement.attr("id",questionCount)
 			questionsDiv.append(questionElement)
-			questionCount ++
 			showChoices()
 		}
 		
+		function takeMeOut() {
+			done()
+		}
+		
+		function done() {
+			if(confirm("This will log you out. Are you sure?")) {
+				if(questionCount!=0) {
+					if(!saveQuestion()) {
+						alert("Select the correct option!!")
+						return
+					}
+				}
+				logout()
+			}
+		}
+		
 		function saveQuestion() {
+			qStatement = $("#questions #"+questionCount+" span").text()
+			console.log("Question: "+qStatement)
+			qChoices = [$('#c1').text(),$('#c2').text(),$('#c3').text(),$('#c4').text()]
+			console.log("Choices: "+qChoices)
+			qAnswer = $("#choices input[type='radio']:checked").val()
+			console.log("Selected: "+qAnswer)
+			if(qAnswer == null)
+				return false
 			
+			// Push the question up the stack
+			 Q.push({
+				    statement: qStatement ,
+				    choices: qChoices,
+				    answer: qAnswer
+				  })
+			store(function() {
+				console.log("Question stored!!")
+			})
+			return true
 		}
 		
 		function removeQuestion() {
-			console.clear()
-			console.log("Remove question")
+			if(questionCount != 0) {
+				$("#questions #"+questionCount).remove()
+				questionCount --
+				// Remove from the Question stack
+				Q.pop()
+				store(function(){
+					console.log("Question popped")
+				})
+				// Retrieve the latest question's choices
+				retrieveOptions()
+			}else {
+				console.log("Add question first")
+			}
 		}
 	</script>
 
