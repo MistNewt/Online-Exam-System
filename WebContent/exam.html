@@ -12,26 +12,27 @@
 </head>
 <body>
 	<div class="row">
-		<div class="col-lg-4" id="output">Loading...</div>
-
-		<div class="col-lg-6">
-			<input type="button" class="btn btn-danger" value="Log Out"
-				onClick="logout()" />
+		<div class="col-md-6" id="output"><h4>Loading...</h4></div>
+		<div class="col-md-6">
+			<input type="button" class="btn btn-danger pull-right"
+				value="Log Out" onClick="logout()" />
 		</div>
 	</div>
+	<br />
+	<br />
 	<div class="row">
-		<div class="col-lg-6">
-			<div class="row col-lg-12">
+		<div class="col-md-6">
+			<div class="row col-md-12">
 				<span><strong>Questions</strong></span>
 			</div>
 			<div id="questions" class="row col-lg-12"></div>
 		</div>
-		<div class="col-lg-6">
-			<div class="row col-lg-12">
+		<div class="col-md-6">
+			<div class="row col-md-12">
 				<span><strong>Choices</strong></span>
 			</div>
-			<div id="choices" class = "list-group">
-				<div class='row col-lg-12 list-group-item'>
+			<div id="choices" class="list-group">
+				<div class='row col-lg-12 list-group-item active'>
 					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
 						id='c1'>Sample option</span>
 				</div>
@@ -50,25 +51,26 @@
 			</div>
 		</div>
 	</div>
-
+	<br />
+	<br />
 	<div class="row">
-		<div class="col-sm-1">
+		<div class="col-md-1 pull-left">
 			<input type="button" class="btn btn-primary" value="prev"
 				onClick="prevQuestion()" />
 		</div>
-		<div class="col-sm-1">
+		<div class="col-md-1">
 			<input type="button" class="btn btn-primary" value="next"
 				onClick="nextQuestion()" />
 		</div>
-		<div class="col-sm-1">
-			<input type="button" class="btn btn-primary" value="finish"
+		<div class="col-md-10">
+			<input type="button" class="btn btn-success pull-right" value="finish"
 				onClick="endExam()" />
 		</div>
 	</div>
 	<br />
 	<br />
 	<div class="row">
-		<div class="col-lg-6">
+		<div class="col-md-6">
 			<dialog id="scoreDialog"></dialog>
 		</div>
 	</div>
@@ -84,14 +86,17 @@
 		
 		OnLoad( () => {
 			if(User)
-				getElement("output").innerHTML = "Welcome "+ User.name
+				getElement("output").innerHTML = "<h4>Welcome "+ User.name +"</h4>"
 			else
-				getElement("output").innerHTML = "Who are you?"
+				getElement("output").innerHTML = "<h4>Who are you?</h4>"
 			fetchQuestion()
 		})
 		
 		function choicesHandler() {
 			selectedAnswer = $("#choices input[type='radio']:checked").val()
+			var radioElement = $("#choices input[type='radio']:checked")
+			$("#choices").children().removeClass("active")
+			radioElement.parent().addClass("active")
 		}
 		
 		function fetchQuestion() {
@@ -189,9 +194,12 @@
 </body>
 <style>
 body, html {
-    height: 100%;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	height: 100%;
+	background-repeat: no-repeat;
+	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+}
+h4 {
+	font-weight : bold
 }
 </style>
 </html>

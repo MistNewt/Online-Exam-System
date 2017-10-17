@@ -13,12 +13,14 @@
 </head>
 <body>
 	<div class="row">
-		<div class="col-md-6" id="output">Loading...</div>
+		<div class="col-md-6" id="output"><h4>Loading...</h4></div>
 		<div class="col-md-6">
-			<input type="button" class="btn btn-danger" value="Log Out"
+			<input type="button" class="btn btn-danger pull-right" value="Log Out"
 				onClick="takeMeOut()" />
 		</div>
 	</div>
+	<br />
+	<br />
 	<div class="row">
 		<div class="col-md-6">
 			<div class="row col-md-12">
@@ -50,17 +52,19 @@
 			</div>
 		</div>
 	</div>
+	<br />
+	<br />
 	<div class="row">
-		<div class="col-sm-1">
+		<div class="col-md-1">
 			<input type="button" class="btn btn-primary" value="add"
 				onClick="addQuestion()" />
 		</div>
-		<div class="col-sm-1">
-			<input type="button" class="btn btn-danger" value="remove"
+		<div class="col-md-1">
+			<input type="button" class="btn btn-primary" value="remove"
 				onClick="removeQuestion()" />
 		</div>
-		<div class="col-sm-1">
-			<input type="button" class="btn btn-danger" value="finish"
+		<div class="col-md-10">
+			<input type="button" class="btn btn-danger pull-right" value="finish"
 				onClick="finished()" />
 		</div>
 	</div>
@@ -77,9 +81,9 @@
 		var selectedQuestion = null
 		OnLoad( () => {
 			if(User)
-				getElement("output").innerHTML = "Welcome "+ User.name
+				getElement("output").innerHTML = "<h4>Welcome "+ User.name+"</h4>"
 			else
-				getElement("output").innerHTML = "Who are you?"
+				getElement("output").innerHTML = "<h4>Who are you?</h4>"
 		});
 		
 		hideChoices()
@@ -90,6 +94,14 @@
 		
 		$("#choices").click(setOption)
 		$("#choices").focusout(saveOption)
+		$("#choices").on("change",changeListener)
+		
+		function changeListener() {
+			var radioElement = $("#choices input[type='radio']:checked")
+			$("#choices").children().removeClass("active")
+			radioElement.parent().addClass("active")
+			
+		}
 		
 		function resetChoices() {
 			for(var i = 1;i<=4;i++)
@@ -288,6 +300,9 @@ body, html {
     height: 100%;
     background-repeat: no-repeat;
     background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+}
+h4 {
+	font-weight : bold
 }
 </style>
 </html>
