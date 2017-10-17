@@ -6,7 +6,7 @@
 <script src="al.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="questions.css" />
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -33,7 +33,7 @@
 				<span><strong>Choices</strong></span>
 			</div>
 			<div id="choices" class = "list-group">
-				<div class='row col-md-12 list-group-item' >
+				<div class='row col-md-12 list-group-item ' >
 					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
 						id='c1'>Sample option</span>
 				</div>
@@ -137,6 +137,7 @@
 				}
 				var answer = Q[questionCount-1].answer
 				$("#c"+answer+"_radio").attr("checked","checked")
+				$("#c"+answer+"_radio").parent().addClass('active')
 			} else
 				hideChoices()
 		}
