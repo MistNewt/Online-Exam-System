@@ -97,27 +97,29 @@
 		}
 		
 		function fetchQuestion() {
-			// Fetching the question
-			var questionDiv = $("#questions")
-			// Clear previous question, if any
-			questionDiv.children().remove()
-			var questionElement = $("<div>")
-			var spanElement = $("<span>")
-			spanElement.text(Q[currentQuestion].statement)
-			questionElement.append(spanElement)
-			questionDiv.append(questionElement)
-			
-			// Fetching the choices
-			var choices = Q[currentQuestion].choices
-			for(var i = 1;i<=4;i++) {
-				$("#c"+i).text(choices[i-1])
+			if(currentQuestion < Q.length) {
+				// Fetching the question
+				var questionDiv = $("#questions")
+				// Clear previous question, if any
+				questionDiv.children().remove()
+				var questionElement = $("<div>")
+				var spanElement = $("<span>")
+				spanElement.text(Q[currentQuestion].statement)
+				questionElement.append(spanElement)
+				questionDiv.append(questionElement)
+				
+				// Fetching the choices
+				var choices = Q[currentQuestion].choices
+				for(var i = 1;i<=4;i++) {
+					$("#c"+i).text(choices[i-1])
+				}
+				
+				// Making default selection
+				$("#c1_radio").attr("checked","checked")
+				
+				// Fetching the answer
+				currentAnswer = Q[currentQuestion].answer
 			}
-			
-			// Making default selection
-			$("#c1_radio").attr("checked","checked")
-			
-			// Fetching the answer
-			currentAnswer = Q[currentQuestion].answer
 		}
 		
 		function prevQuestion() {
@@ -141,11 +143,12 @@
 		
 		function nextQuestion() {
 			var endFlag = false
-			if(currentQuestion == Q.length -1) {
+			if(currentQuestion == Q.length-1) {
 				if(confirm("No more questions! Do you want to end?")){
 					endFlag = true
 				}
-			} else if(!selectedAnswer) {
+			}
+			if(!selectedAnswer) {
 				alert("Select an answer first")
 			} else {
 				if(selectedAnswer == currentAnswer) {
@@ -160,6 +163,7 @@
 				currentQuestion ++
 				fetchQuestion()
 			}
+			console.log("EndFlag: "+endFlag)
 			if(endFlag)
 				showScore()
 		}
@@ -178,6 +182,10 @@
 		}
 		
 		function showScore() {
+			var body = $("body")
+			// Hiding the exam elements
+			$(body.children("div")[1]).hide()
+			$(body.children("div")[2]).hide()
 			var dialogElement = document.getElementById("scoreDialog")
 			$(dialogElement).text("Your scored: "+score)
 			dialogElement.show()
