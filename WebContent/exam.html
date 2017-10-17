@@ -13,7 +13,9 @@
 <body>
 	<div class="row">
 		<div class="col-lg-4" id="output">Loading...</div>
-		<div class="col-lg-2" id = "score"><strong>Score: 0</strong></div>
+		<div class="col-lg-2" id="score">
+			<strong>Score: 0</strong>
+		</div>
 		<div class="col-lg-6">
 			<input type="button" class="btn btn-danger" value="Log Out"
 				onClick="logout()" />
@@ -50,7 +52,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<div class="col-sm-1">
 			<input type="button" class="btn btn-primary" value="prev"
@@ -59,6 +61,17 @@
 		<div class="col-sm-1">
 			<input type="button" class="btn btn-primary" value="next"
 				onClick="nextQuestion()" />
+		</div>
+		<div class="col-sm-1">
+			<input type="button" class="btn btn-primary" value="finish"
+				onClick="endExam()" />
+		</div>
+	</div>
+	<br />
+	<br />
+	<div class="row">
+		<div class="col-lg-6">
+			<dialog id="scoreDialog"></dialog>
 		</div>
 	</div>
 
@@ -160,7 +173,14 @@
 			}
 		}
 		
+		function endExam() {
+			showScore()
+		}
+		
 		function showScore() {
+			var dialogElement = document.getElementById("scoreDialog")
+			$(dialogElement).text("Your scored: "+score)
+			dialogElement.show()
 			console.log("You scored: "+score)
 		}
 		
