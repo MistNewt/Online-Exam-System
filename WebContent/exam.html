@@ -13,9 +13,7 @@
 <body>
 	<div class="row">
 		<div class="col-lg-4" id="output">Loading...</div>
-		<div class="col-lg-2" id="score">
-			<strong>Score: 0</strong>
-		</div>
+
 		<div class="col-lg-6">
 			<input type="button" class="btn btn-danger" value="Log Out"
 				onClick="logout()" />
@@ -32,20 +30,20 @@
 			<div class="row col-lg-12">
 				<span><strong>Choices</strong></span>
 			</div>
-			<div id="choices">
-				<div class='row col-lg-12'>
+			<div id="choices" class = "list-group">
+				<div class='row col-lg-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
 						id='c1'>Sample option</span>
 				</div>
-				<div class='row col-lg-12'>
+				<div class='row col-lg-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c2_radio" value="2" /> <span
 						id='c2'>Sample option</span>
 				</div>
-				<div class='row col-lg-12'>
+				<div class='row col-lg-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c3_radio" value="3" /> <span
 						id='c3'>Sample option</span>
 				</div>
-				<div class='row col-lg-12'>
+				<div class='row col-lg-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c4_radio" value="4" /> <span
 						id='c4'>Sample option</span>
 				</div>
@@ -97,6 +95,7 @@
 		}
 		
 		function fetchQuestion() {
+			currentAnswer = null
 			if(currentQuestion < Q.length) {
 				// Fetching the question
 				var questionDiv = $("#questions")
@@ -105,6 +104,7 @@
 				var questionElement = $("<div>")
 				var spanElement = $("<span>")
 				spanElement.text(Q[currentQuestion].statement)
+				questionElement.addClass("list-group-item")
 				questionElement.append(spanElement)
 				questionDiv.append(questionElement)
 				
@@ -135,15 +135,15 @@
 					}
 				} else
 					answeredFlag[currentQuestion] = false
-				updateScore()
 				currentQuestion --
 				fetchQuestion()
+				
 			}
 		}
 		
 		function nextQuestion() {
 			var endFlag = false
-			if(currentQuestion == Q.length-1) {
+			if(currentQuestion >= Q.length-1) {
 				if(confirm("No more questions! Do you want to end?")){
 					endFlag = true
 				}
@@ -159,22 +159,14 @@
 				}
 				else
 					answeredFlag[currentQuestion] = false
-				updateScore()
 				currentQuestion ++
 				fetchQuestion()
 			}
 			console.log("EndFlag: "+endFlag)
+			console.log("Current Question: "+currentQuestion)
+			console.log("Questions: "+Q.length)
 			if(endFlag)
 				showScore()
-		}
-		
-		function updateScore() {
-			var scoreDiv = $("#score")
-			if(selectedAnswer) {
-				scoreDiv.html("<strong>Score: "+score+"</strong>")
-			} else {
-				scoreDiv.html("<strong>Score: 0</strong>")
-			}
 		}
 		
 		function endExam() {
@@ -195,4 +187,11 @@
 	</script>
 
 </body>
+<style>
+body, html {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+}
+</style>
 </html>

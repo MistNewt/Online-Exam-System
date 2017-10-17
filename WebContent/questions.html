@@ -24,26 +24,26 @@
 			<div class="row col-md-12">
 				<span><strong>Questions</strong></span>
 			</div>
-			<div id="questions" class="row col-md-12"></div>
+			<div id="questions" class="row col-md-12 list-group"></div>
 		</div>
 		<div class="col-lg-6 ">
 			<div class="row col-md-12">
 				<span><strong>Choices</strong></span>
 			</div>
-			<div id="choices">
-				<div class='row col-md-12'>
+			<div id="choices" class = "list-group">
+				<div class='row col-md-12 list-group-item' >
 					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
 						id='c1'>Sample option</span>
 				</div>
-				<div class='row col-md-12'>
+				<div class='row col-md-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c2_radio" value="2" /> <span
 						id='c2'>Sample option</span>
 				</div>
-				<div class='row col-md-12'>
+				<div class='row col-md-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c3_radio" value="3" /> <span
 						id='c3'>Sample option</span>
 				</div>
-				<div class='row col-md-12'>
+				<div class='row col-md-12 list-group-item'>
 					<input type='radio' name="ch_radio" id="c4_radio" value="4" /> <span
 						id='c4'>Sample option</span>
 				</div>
@@ -105,6 +105,7 @@
 				spanElement.text(Q[i].statement)
 				questionElement.append(spanElement)
 				questionElement.attr("id",i+1)
+				questionElement.addClass("list-group-item")
 				questionsDiv.append(questionElement)
 			}
 			// retrieve the options
@@ -210,6 +211,7 @@
 			var questionElement = $("<div>")
 			questionElement.append("<span>Sample Question</span>")
 			questionElement.attr("id",questionCount)
+			questionElement.addClass("list-group-item")
 			questionsDiv.append(questionElement)
 			showChoices()
 		}
@@ -281,4 +283,11 @@
 	</script>
 
 </body>
+<style>
+body, html {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+}
+</style>
 </html>
